@@ -1,0 +1,104 @@
+<UserControl
+    x:Class="WinOsUtils.Views.DebloatPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:controls="clr-namespace:WinOsUtils.Controls">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" controls:WheelScroll.Proportional="True">
+        <StackPanel Margin="32,20,32,32" MaxWidth="920" HorizontalAlignment="Left">
+
+            <TextBlock Style="{StaticResource TitleText}" Text="Debloat" />
+            <TextBlock
+                Margin="0,4,0,20"
+                Style="{StaticResource CaptionText}"
+                FontSize="14"
+                Text="Remove the bundled Microsoft apps you don't use, along with the leftovers and policy keys that let Windows Update quietly put them back." />
+
+            <controls:ToolCard
+                x:Name="OneDriveCard"
+                Icon="Cloud24"
+                Title="Remove OneDrive"
+                Status="Not scanned">
+                <controls:RemediationSection
+                    x:Name="OneDriveSection"
+                    Description="Uninstall OneDrive, delete its leftover files, and revert the registry and policy entries that Windows updates can re-add. Scan first to see exactly what will change."
+                    WarningTitle="Applying deletes files"
+                    WarningBody="Apply removes the folders listed below, including your user OneDrive folder and anything still in it. Nothing is deleted until you review the scan and apply."
+                    CompliantTitle="OneDrive is fully removed" />
+            </controls:ToolCard>
+
+            <controls:ToolCard
+                x:Name="CopilotCard"
+                Icon="Bot24"
+                Title="Remove Copilot"
+                Status="Not scanned">
+                <controls:RemediationSection
+                    x:Name="CopilotSection"
+                    Description="Uninstall Copilot for all users, deprovision it so new accounts don't get it, and write the policy values that hide it from Windows, the taskbar and Edge."
+                    CompliantTitle="Copilot is fully removed" />
+            </controls:ToolCard>
+
+            <controls:ToolCard
+                x:Name="EdgeCard"
+                Icon="Globe24"
+                Title="Remove Edge &amp; leftovers"
+                Status="Reading…">
+                <StackPanel>
+                    <ui:InfoBar
+                        Margin="0,0,0,14"
+                        Severity="Warning"
+                        IsClosable="False"
+                        IsOpen="True"
+                        Title="Before you remove Edge"
+                        Message="Removing Edge also stops it from silently reinstalling through Windows Update. The separate WebView2 runtime is left in place, so apps that embed it (Teams, new Outlook, the Widgets board) keep working. On some Windows builds and regions Microsoft blocks removal — if that happens, the tool will tell you, and in the EU/EEA you can finish from Settings. Install a replacement browser from the Apps page first so you're never without one." />
+
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource BodyStrongText}" Text="Microsoft Edge" />
+                            <TextBlock x:Name="EdgeDetailText" Margin="0,2,0,0" Style="{StaticResource CaptionText}" Text="Reading…" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <ui:ProgressRing
+                                x:Name="EdgeBusyRing"
+                                Width="22"
+                                Height="22"
+                                Margin="0,0,12,0"
+                                IsIndeterminate="True"
+                                VerticalAlignment="Center"
+                                Visibility="Collapsed" />
+                            <ui:Button
+                                x:Name="RemoveEdgeButton"
+                                Icon="{ui:SymbolIcon Delete24}"
+                                Content="Remove Edge"
+                                Click="OnRemoveEdgeClick" />
+                        </StackPanel>
+                    </Grid>
+
+                    <ui:InfoBar
+                        x:Name="EdgeResultBar"
+                        Margin="0,0,0,16"
+                        IsClosable="False"
+                        IsOpen="False" />
+
+                    <TextBlock Style="{StaticResource BodyStrongText}" Margin="0,0,0,8" Text="Deep scan for leftovers" />
+                    <controls:RemediationSection
+                        x:Name="EdgeLeftoverSection"
+                        Description="After Edge is uninstalled, Windows often leaves folders, registry keys, scheduled tasks, services and shortcuts behind. Scan to find them, then clean them up. The WebView2 runtime and the updater it depends on are always kept."
+                        ScanLabel="Deep scan"
+                        ApplyLabel="Clean up leftovers"
+                        CompliantTitle="No Edge leftovers found"
+                        CompliantMessage="Every checked location is clean. WebView2 was left untouched."
+                        AppliedMessage="Everything was cleaned up and re-verified — nothing left behind."
+                        PendingMessage="Review the list below, then click Clean up leftovers."
+                        RemainingMessage="A reboot may be needed to release files or services still in use, then scan again." />
+                </StackPanel>
+            </controls:ToolCard>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

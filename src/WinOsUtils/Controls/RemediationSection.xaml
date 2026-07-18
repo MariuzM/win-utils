@@ -1,0 +1,86 @@
+<UserControl
+    x:Class="WinOsUtils.Controls.RemediationSection"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    x:Name="Root">
+
+    <StackPanel>
+
+        <TextBlock
+            Style="{StaticResource CaptionText}"
+            FontSize="13"
+            Margin="0,0,0,14"
+            Text="{Binding Description, ElementName=Root}" />
+
+        <ui:InfoBar
+            x:Name="WarningBar"
+            Margin="0,0,0,14"
+            Severity="Warning"
+            IsClosable="False"
+            Title="{Binding WarningTitle, ElementName=Root}"
+            Message="{Binding WarningBody, ElementName=Root}"
+            IsOpen="False" />
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+            <ui:Button
+                x:Name="ScanButton"
+                Appearance="Primary"
+                Icon="{ui:SymbolIcon Search24}"
+                Content="{Binding ScanLabel, ElementName=Root}"
+                Click="OnScanClick" />
+            <ui:Button
+                x:Name="ApplyButton"
+                Margin="10,0,0,0"
+                Icon="{ui:SymbolIcon Checkmark24}"
+                Content="{Binding ApplyLabel, ElementName=Root}"
+                IsEnabled="False"
+                Click="OnApplyClick" />
+            <ui:ProgressRing
+                x:Name="BusyRing"
+                Width="22"
+                Height="22"
+                Margin="14,0,0,0"
+                IsIndeterminate="True"
+                VerticalAlignment="Center"
+                Visibility="Collapsed" />
+        </StackPanel>
+
+        <ui:InfoBar
+            x:Name="SummaryBar"
+            Margin="0,0,0,14"
+            IsClosable="False"
+            IsOpen="False" />
+
+        <ItemsControl x:Name="ResultsList">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="2,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Style="{StaticResource GlyphText}"
+                            FontSize="17"
+                            VerticalAlignment="Center"
+                            Text="{Binding State, Converter={StaticResource StateGlyph}}"
+                            Foreground="{Binding State, Converter={StaticResource StateBrush}}" />
+                        <StackPanel Grid.Column="1" Margin="13,0" VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource BodyStrongText}" Text="{Binding Title}" />
+                            <TextBlock Style="{StaticResource CaptionText}" Margin="0,2,0,0" Text="{Binding Detail}" />
+                        </StackPanel>
+                        <TextBlock
+                            Grid.Column="2"
+                            Style="{StaticResource CaptionText}"
+                            VerticalAlignment="Center"
+                            Text="{Binding Category}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </StackPanel>
+</UserControl>

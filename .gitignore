@@ -1,0 +1,41 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Dd]ebug/
+[Rr]elease/
+x64/
+arm64/
+*.pdb
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+
+# App packaging
+AppPackages/
+BundleArtifacts/
+*.appx
+*.msix
+*.appxbundle
+Generated Files/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini

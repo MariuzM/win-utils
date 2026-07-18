@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <RootNamespace>WinShell</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x64;arm64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!--
+      No WPF, no WinForms, no XAML. This is a raw Win32 message-loop app: the whole point is
+      that the taskbar costs less RAM than the shell surfaces it replaces.
+
+      Written AOT-clean from day one - LibraryImport source generators instead of DllImport,
+      UnmanagedCallersOnly for native callbacks, zero reflection. The analyzers below enforce
+      that. Once VS Build Tools (specifically link.exe) is installed, adding PublishAot=true
+      takes this from ~30 MB to ~12 MB with no source changes.
+    -->
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,70 @@
+<UserControl
+    x:Class="WinOsUtils.Views.PrivacyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:controls="clr-namespace:WinOsUtils.Controls">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" controls:WheelScroll.Proportional="True">
+        <StackPanel Margin="32,20,32,32" MaxWidth="920" HorizontalAlignment="Left">
+
+            <TextBlock Style="{StaticResource TitleText}" Text="Privacy" />
+            <TextBlock
+                Margin="0,4,0,20"
+                Style="{StaticResource CaptionText}"
+                FontSize="14"
+                Text="Stop Windows sending diagnostics, activity and search queries out to Microsoft." />
+
+            <controls:ToolCard
+                x:Name="TelemetryCard"
+                Icon="Shield24"
+                Title="Telemetry &amp; privacy"
+                Status="Not scanned">
+                <controls:RemediationSection
+                    x:Name="TelemetrySection"
+                    Description="Checks diagnostics data, advertising ID, activity history, location, suggestions, typing data, Cortana and the telemetry services, then turns off whatever is still reporting."
+                    ApplyLabel="Disable all"
+                    CompliantTitle="Telemetry is already off"
+                    PendingMessage="Review the list below, then click Disable all." />
+            </controls:ToolCard>
+
+            <controls:ToolCard
+                x:Name="SearchCard"
+                Icon="Search24"
+                Title="Web results in Search"
+                Status="—">
+                <StackPanel>
+                    <TextBlock
+                        Style="{StaticResource CaptionText}"
+                        FontSize="13"
+                        Margin="0,0,0,14"
+                        Text="Turn the web side of Windows Search on or off. When off, Search stops sending queries to Bing and stops loading search highlights — local app and file search keeps working." />
+
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource BodyStrongText}" Text="Send searches to Bing" />
+                            <TextBlock x:Name="StateText" Margin="0,2,0,0" Style="{StaticResource CaptionText}" Text="—" />
+                        </StackPanel>
+                        <ui:ToggleSwitch
+                            x:Name="WebToggle"
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Click="OnToggle" />
+                    </Grid>
+
+                    <ui:InfoBar
+                        Severity="Informational"
+                        IsClosable="False"
+                        IsOpen="True"
+                        Title="About the msedgewebview2 processes"
+                        Message="Turning this off stops Search's web/Bing activity, but it will not remove the WebView2 processes SearchHost runs — on Windows 11 the search box UI itself is web-rendered, so a few idle WebView2 hosts remain as long as Search works at all. Removing those entirely would break Start-menu and taskbar search." />
+                </StackPanel>
+            </controls:ToolCard>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
