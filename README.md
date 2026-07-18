@@ -43,15 +43,15 @@ encrypted LSA secret (`LsaStorePrivateData`) — never as a plaintext registry v
 
 ## WinSnip
 
-Runs in the tray. Captures go straight to the Desktop as
-`Screenshot 2026-07-18 at 20.31.15.png` — no editor, no save dialog.
+Runs in the tray. Captures go straight to the Desktop as `Screenshot 2026-07-18 at 20.31.15.png` —
+no editor, no save dialog.
 
 - `Ctrl+Shift+1` — the monitor under the cursor
 - `Ctrl+Shift+2` — drag a region
 - `Ctrl+Shift+3` — hover a window, click to capture it
 
-`Esc` or right-click cancels. Capture uses Windows.Graphics.Capture, so hardware-accelerated
-windows (Chrome, Electron, games) come out correctly rather than black.
+`Esc` or right-click cancels. Capture uses Windows.Graphics.Capture, so hardware-accelerated windows
+(Chrome, Electron, games) come out correctly rather than black.
 
 ## Build
 
