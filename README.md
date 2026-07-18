@@ -1,21 +1,25 @@
-# WinOS Utils
+# WinUtils
 
 Windows 11 tweaking utilities, written in C# / .NET 9.
 
-Two projects live here:
+Three projects live here:
 
-| Project          | What it is                                                                                                       |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `src/WinOsUtils` | WPF app with the debloat / privacy / performance tools. Runs against the .NET 9 Desktop Runtime.                 |
-| `src/WinShell`   | Work in progress. Raw Win32 (no WPF/WinForms) Windows 7-style taskbar and Start menu replacement. See `TODO.md`. |
+| Project        | What it is                                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `src/WinUtils` | WPF app with the debloat / privacy / performance tools. Runs against the .NET 9 Desktop Runtime.                 |
+| `src/WinSnip`  | Tray screenshot tool — full screen, region, or click a window. Saves straight to the Desktop.                    |
+| `src/WinShell` | Work in progress. Raw Win32 (no WPF/WinForms) Windows 7-style taskbar and Start menu replacement. See `TODO.md`. |
 
 ## Download
 
-Prebuilt binaries are in [`dist/`](dist) — `win-x64` for Intel/AMD, `win-arm64` for ARM machines.
-Download the whole folder for your architecture and run `WinOsUtils.exe`; it needs the files next to
-it. Requires the [.NET 9 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/9.0).
+Prebuilt binaries are in [`dist/`](dist), one folder per app and architecture — `winutils-x64` /
+`winutils-arm64` and `winsnip-x64` / `winsnip-arm64`.
 
-## WinOsUtils
+- **WinUtils** — download the whole folder; the exe needs the files beside it, and the
+  [.NET 9 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/9.0) installed.
+- **WinSnip** — a single self-contained exe. Nothing to install.
+
+## WinUtils
 
 Six pages, each a list of toggles that report what they changed:
 
@@ -37,16 +41,31 @@ encrypted LSA secret (`LsaStorePrivateData`) — never as a plaintext registry v
 > a local administrator can still recover the stored password. Only enable it on a device you
 > physically trust.
 
+## WinSnip
+
+Runs in the tray. Captures go straight to the Desktop as
+`Screenshot 2026-07-18 at 20.31.15.png` — no editor, no save dialog.
+
+- `Ctrl+Shift+1` — the monitor under the cursor
+- `Ctrl+Shift+2` — drag a region
+- `Ctrl+Shift+3` — hover a window, click to capture it
+
+`Esc` or right-click cancels. Capture uses Windows.Graphics.Capture, so hardware-accelerated
+windows (Chrome, Electron, games) come out correctly rather than black.
+
 ## Build
 
 Requires Windows 11 (x64 or arm64) and the .NET 9 SDK.
 
 ```powershell
-dotnet publish src\WinOsUtils\WinOsUtils.csproj -c Release -r win-arm64 -p:Platform=arm64 --self-contained false -p:PublishSingleFile=true
+dotnet publish src\WinUtils\WinUtils.csproj -c Release -r win-arm64 -p:Platform=arm64 --self-contained false -p:PublishSingleFile=true
 ```
 
-Swap `win-arm64` / `arm64` for `win-x64` / `x64` on Intel/AMD machines. Both apps request
-Administrator via their `app.manifest`, so run Visual Studio elevated if you want to `F5` debug.
+Swap `win-arm64` / `arm64` for `win-x64` / `x64` on Intel/AMD machines. WinUtils requests
+Administrator via its `app.manifest`, so run Visual Studio elevated if you want to `F5` debug;
+WinSnip and WinShell run as the invoking user.
+
+Adding `-p:EnableWindowsTargeting=true` lets all three build from macOS or Linux, WPF included.
 
 Formatting is handled by [CSharpier](https://csharpier.com):
 

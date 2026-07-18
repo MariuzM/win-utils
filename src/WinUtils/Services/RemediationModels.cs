@@ -1,4 +1,4 @@
-namespace WinOsUtils.Services;
+namespace WinUtils.Services;
 
 public enum CheckState
 {

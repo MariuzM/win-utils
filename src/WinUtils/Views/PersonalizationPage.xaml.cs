@@ -1,7 +1,7 @@
 using System.Windows.Controls;
-using WinOsUtils.Services;
+using WinUtils.Services;
 
-namespace WinOsUtils.Views;
+namespace WinUtils.Views;
 
 public partial class PersonalizationPage : UserControl
 {

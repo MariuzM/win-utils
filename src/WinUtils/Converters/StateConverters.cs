@@ -2,9 +2,9 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using WinOsUtils.Services;
+using WinUtils.Services;
 
-namespace WinOsUtils.Converters;
+namespace WinUtils.Converters;
 
 public sealed class StateToGlyphConverter : IValueConverter
 {

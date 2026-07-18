@@ -1,6 +1,6 @@
 using Microsoft.Win32;
 
-namespace WinOsUtils.Services;
+namespace WinUtils.Services;
 
 public static class SearchService
 {

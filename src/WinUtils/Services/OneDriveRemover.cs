@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Win32;
 
-namespace WinOsUtils.Services;
+namespace WinUtils.Services;
 
 public sealed class OneDriveRemover
 {

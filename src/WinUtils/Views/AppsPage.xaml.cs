@@ -1,16 +1,15 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using WinUtils.Services;
 using Wpf.Ui.Controls;
-using WinOsUtils.Services;
-
 // Wpf.Ui.Controls ships its own MessageBox; keep the familiar Win32 dialogs.
 using MessageBox = System.Windows.MessageBox;
 using MessageBoxButton = System.Windows.MessageBoxButton;
 using MessageBoxImage = System.Windows.MessageBoxImage;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 
-namespace WinOsUtils.Views;
+namespace WinUtils.Views;
 
 public partial class AppsPage : UserControl
 {
@@ -54,7 +53,8 @@ public partial class AppsPage : UserControl
             $"{_items.Count} app(s) found",
             _items.Count > 0
                 ? "Tick the apps to remove, then click Uninstall selected. Leftovers are removed automatically."
-                : "No uninstallable apps were detected.");
+                : "No uninstallable apps were detected."
+        );
 
         InventoryCard.Status = $"{_items.Count} app(s) found";
 
@@ -85,7 +85,8 @@ public partial class AppsPage : UserControl
                 + "This can't be undone. Apps are removed one by one; some may briefly show their own uninstaller.",
             "Uninstall selected apps",
             MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            MessageBoxImage.Warning
+        );
         if (confirm != MessageBoxResult.Yes)
             return;
 
@@ -116,7 +117,8 @@ public partial class AppsPage : UserControl
             SetSummary(
                 InfoBarSeverity.Success,
                 $"{ok} app(s) uninstalled",
-                "Selected apps and their detected leftovers were removed.");
+                "Selected apps and their detected leftovers were removed."
+            );
         }
         else
         {
@@ -124,7 +126,8 @@ public partial class AppsPage : UserControl
             SetSummary(
                 InfoBarSeverity.Warning,
                 $"{ok} uninstalled, {failed} need attention",
-                $"Couldn't fully remove: {stuck}. They may need user interaction or a reboot — re-scan afterwards.");
+                $"Couldn't fully remove: {stuck}. They may need user interaction or a reboot — re-scan afterwards."
+            );
         }
 
         InventoryCard.Status = $"{_items.Count} app(s) found";

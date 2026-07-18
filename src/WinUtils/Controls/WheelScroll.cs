@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace WinOsUtils.Controls;
+namespace WinUtils.Controls;
 
 /// <summary>
 /// Makes a ScrollViewer honour the *magnitude* of the mouse wheel delta.

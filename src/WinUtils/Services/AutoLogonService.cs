@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
-namespace WinOsUtils.Services;
+namespace WinUtils.Services;
 
 public sealed record AutoLogonStatus(bool Enabled, string UserName, string Domain);
 

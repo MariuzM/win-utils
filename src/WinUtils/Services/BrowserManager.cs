@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Win32;
 
-namespace WinOsUtils.Services;
+namespace WinUtils.Services;
 
 public enum BrowserChoice
 {

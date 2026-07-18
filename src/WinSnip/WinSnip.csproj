@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>WinSnip</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x64;arm64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <!--
+      Unlike WinShell (net9.0-windows), this project needs a Windows-VERSIONED target framework.
+      Plain net9.0-windows resolves to Windows,Version=7.0, which ships no Windows SDK projections
+      at all - every Windows.Graphics.Capture type fails to resolve with CS0246. 20348 is the floor
+      that makes GraphicsCaptureSession.IsBorderRequired compile; SupportedOSPlatformVersion is held
+      down at 19041 so the app still loads on older Windows 10 and degrades at runtime instead.
+
+      Deliberately no <WindowsSdkPackageVersion>: Microsoft documents it as rare-cases-only, and on
+      .NET 9 pinning it below .38 silently breaks resolution of every type in the SDK projection.
+    -->
+    <TargetFramework>net9.0-windows10.0.20348.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+
+    <!--
+      Lets the project compile on a non-Windows host. WinSnip is raw Win32 with no WPF/WinForms,
+      so the whole thing cross-builds from macOS; only the actual run needs Windows.
+    -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+
+    <!--
+      Auto = let CsWinRT detect which types cross the WinRT ABI rather than requiring every one of
+      them to be hand-annotated. Note this project is NOT AOT-clean the way WinShell is: consuming
+      WinRT runtime classes means CsWinRT projections, and neither CsWinRT's AOT support nor
+      Windows.Graphics.Capture specifically has been validated under NativeAOT. Framework-dependent
+      only until that is actually tested - do not add PublishAot here on the assumption it works.
+    -->
+    <CsWinRTAotOptimizerEnabled>Auto</CsWinRTAotOptimizerEnabled>
+
+    <!--
+      Self-contained AND trimmed, which is smaller than the framework-dependent build rather than
+      larger: 14 MB against 25 MB. Consuming WinRT drags in Microsoft.Windows.SDK.NET.dll, a 24 MB
+      projection of the entire Windows SDK. It is NuGet-only - verified absent from
+      C:\Program Files\dotnet\shared - so unlike WPF it can never be borrowed from an installed
+      runtime, however much of .NET the user already has. Trimming discards the thousands of
+      unreferenced projected types, and the saving more than pays for bundling .NET itself.
+
+      Trimming this combination produces IL2104 warnings from Microsoft.Windows.SDK.NET and
+      WinRT.Runtime, and CsWinRT's trim-safety is not validated for Windows.Graphics.Capture
+      specifically. If a capture ever fails in a way a framework-dependent build does not,
+      suspect this first.
+    -->
+    <SelfContained>true</SelfContained>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishSingleFile>true</PublishSingleFile>
+  </PropertyGroup>
+</Project>

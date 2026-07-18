@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace WinOsUtils;
+namespace WinUtils;
 
 public partial class App : Application
 {
@@ -8,7 +8,7 @@ public partial class App : Application
     {
         DispatcherUnhandledException += (_, e) =>
         {
-            MessageBox.Show(e.Exception.Message, "WinOS Utils", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(e.Exception.Message, "WinUtils", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
         };
     }

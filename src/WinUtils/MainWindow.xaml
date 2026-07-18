@@ -1,10 +1,10 @@
 <ui:FluentWindow
-    x:Class="WinOsUtils.MainWindow"
+    x:Class="WinUtils.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:views="clr-namespace:WinOsUtils.Views"
-    Title="WinOS Utils"
+    xmlns:views="clr-namespace:WinUtils.Views"
+    Title="WinUtils"
     Width="1040"
     Height="720"
     MinWidth="840"
@@ -24,7 +24,7 @@
 
         <ui:TitleBar
             Grid.Row="0"
-            Title="WinOS Utils"
+            Title="WinUtils"
             ShowMaximize="True"
             ShowMinimize="True">
             <ui:TitleBar.Icon>

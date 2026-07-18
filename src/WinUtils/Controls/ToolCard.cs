@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Wpf.Ui.Controls;
 
-namespace WinOsUtils.Controls;
+namespace WinUtils.Controls;
 
 /// <summary>
 /// A always-visible tool container: icon, title, live status line, then its content.

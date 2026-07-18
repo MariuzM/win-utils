@@ -1,9 +1,9 @@
 using System.Windows;
 using Wpf.Ui.Abstractions;
 using Wpf.Ui.Controls;
-using WinOsUtils.Views;
+using WinUtils.Views;
 
-namespace WinOsUtils;
+namespace WinUtils;
 
 public partial class MainWindow : FluentWindow
 {

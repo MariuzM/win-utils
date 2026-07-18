@@ -1,9 +1,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using Wpf.Ui.Controls;
-using WinOsUtils.Services;
+using WinUtils.Services;
 
-namespace WinOsUtils.Views;
+namespace WinUtils.Views;
 
 public partial class SystemPage : UserControl
 {

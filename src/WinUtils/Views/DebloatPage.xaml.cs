@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Wpf.Ui.Controls;
-using WinOsUtils.Services;
+using WinUtils.Services;
 
 // Wpf.Ui.Controls ships its own MessageBox; keep the familiar Win32 dialogs.
 using MessageBox = System.Windows.MessageBox;
@@ -9,7 +9,7 @@ using MessageBoxButton = System.Windows.MessageBoxButton;
 using MessageBoxImage = System.Windows.MessageBoxImage;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 
-namespace WinOsUtils.Views;
+namespace WinUtils.Views;
 
 public partial class DebloatPage : UserControl
 {

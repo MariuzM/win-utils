@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Win32;
 
-namespace WinOsUtils.Services;
+namespace WinUtils.Services;
 
 public sealed class TelemetryRemover
 {

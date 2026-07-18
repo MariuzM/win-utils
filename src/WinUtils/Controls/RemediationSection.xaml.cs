@@ -2,9 +2,9 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using Wpf.Ui.Controls;
-using WinOsUtils.Services;
+using WinUtils.Services;
 
-namespace WinOsUtils.Controls;
+namespace WinUtils.Controls;
 
 /// <summary>
 /// The scan / apply / results block that used to be copy-pasted into eight separate pages.

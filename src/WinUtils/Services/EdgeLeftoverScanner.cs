@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Win32;
 
-namespace WinOsUtils.Services;
+namespace WinUtils.Services;
 
 // Deep scan for Microsoft Edge leftovers that survive an uninstall: files, registry,
 // scheduled tasks, services, shortcuts and the Appx package. The WebView2 runtime and the

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using Microsoft.Win32;
 
-namespace WinOsUtils.Services;
+namespace WinUtils.Services;
 
 // Reclaims Start-menu height for pinned items: switches Start to the "More pins" layout and
 // hides the Recommended section (and the recent apps/docs/tips that feed it) so pins get the
