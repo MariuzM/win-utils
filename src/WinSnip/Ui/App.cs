@@ -34,6 +34,10 @@ internal static class App
     // immediately can catch the dimmed overlay still on screen.
     private const int OverlaySettleMs = 80;
 
+    private const int ActivationSettleMs = 150;
+    private const int ActivationPollMs = 15;
+    private const int ActivationPollLimit = 20;
+
     private static IntPtr _hwnd;
     private static string _lastMessage = string.Empty;
     private static bool _lastFailed;
@@ -308,14 +312,22 @@ internal static class App
 
         bool includeShadow = _includeWindowShadow;
         Overlay.ShowWindowPick(hwnd =>
+        {
+            Win32.SetForegroundWindow(hwnd);
             RunCapture(async () =>
             {
-                if (includeShadow)
-                    await Task.Delay(OverlaySettleMs);
-
+                await WaitForActivationAsync(hwnd);
                 return await Snip.WindowAsync(hwnd, includeShadow);
-            })
-        );
+            });
+        });
+    }
+
+    private static async Task WaitForActivationAsync(IntPtr hwnd)
+    {
+        for (int i = 0; i < ActivationPollLimit && Win32.GetForegroundWindow() != hwnd; i++)
+            await Task.Delay(ActivationPollMs);
+
+        await Task.Delay(ActivationSettleMs);
     }
 
     // Capture is asynchronous and must not block the message loop - the loop is what keeps the

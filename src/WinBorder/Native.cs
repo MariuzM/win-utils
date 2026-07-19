@@ -14,7 +14,7 @@ internal static unsafe partial class Native
         nint eventAttributes,
         [MarshalAs(UnmanagedType.Bool)] bool manualReset,
         [MarshalAs(UnmanagedType.Bool)] bool initialState,
-        string name
+        string? name
     );
 
     [LibraryImport(
@@ -57,17 +57,42 @@ internal static unsafe partial class Native
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool EnumWindows(delegate* unmanaged<nint, nint, int> callback, nint lParam);
 
-    [LibraryImport("user32.dll", EntryPoint = "SetTimer")]
-    public static partial nuint SetTimer(
-        nint window,
-        nuint timerId,
-        uint milliseconds,
-        delegate* unmanaged<nint, uint, nuint, uint, void> callback
+    [LibraryImport(
+        "kernel32.dll",
+        EntryPoint = "CreateWaitableTimerExW",
+        SetLastError = true
+    )]
+    public static partial nint CreateWaitableTimerEx(
+        nint timerAttributes,
+        nint name,
+        uint flags,
+        uint desiredAccess
     );
 
-    [LibraryImport("user32.dll", EntryPoint = "KillTimer")]
+    [LibraryImport("kernel32.dll", EntryPoint = "SetWaitableTimer")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static partial bool KillTimer(nint window, nuint timerId);
+    public static partial bool SetWaitableTimer(
+        nint timer,
+        long* dueTime,
+        int period,
+        nint completionRoutine,
+        nint completionArg,
+        [MarshalAs(UnmanagedType.Bool)] bool resume
+    );
+
+    [LibraryImport("kernel32.dll", EntryPoint = "WaitForMultipleObjects")]
+    public static partial uint WaitForMultipleObjects(
+        uint count,
+        nint* handles,
+        [MarshalAs(UnmanagedType.Bool)] bool waitAll,
+        uint milliseconds
+    );
+
+    [LibraryImport("winmm.dll", EntryPoint = "timeBeginPeriod")]
+    public static partial uint TimeBeginPeriod(uint period);
+
+    [LibraryImport("winmm.dll", EntryPoint = "timeEndPeriod")]
+    public static partial uint TimeEndPeriod(uint period);
 
     [LibraryImport("user32.dll", EntryPoint = "SetWinEventHook")]
     public static partial nint SetWinEventHook(

@@ -23,11 +23,16 @@ internal static unsafe class Program
     private const uint MessageWaitInputAvailable = 0x0004;
     private const uint PeekMessageRemove = 0x0001;
     private const uint WindowMessageQuit = 0x0012;
-    private const uint SweepIntervalMilliseconds = 20;
-    private const int SweepTicks = 25;
 
-    private static nuint _sweepTimer;
-    private static int _sweepTicksRemaining;
+    private const uint CreateWaitableTimerHighResolution = 0x0002;
+    private const uint TimerAllAccess = 0x1F0003;
+    private const uint TimerResolutionMilliseconds = 1;
+    private const int BurstPasses = 40;
+    private const long BurstPassDelay = -20000;
+
+    private static nint _burstEvent;
+    private static nint _workerStopEvent;
+    private static Thread? _worker;
 
     private static int Main(string[] args)
     {
@@ -60,7 +65,9 @@ internal static unsafe class Program
         try
         {
             stopEvent = Native.CreateEvent(0, true, false, Protocol.StopEventName);
-            if (stopEvent == 0)
+            _workerStopEvent = Native.CreateEvent(0, true, false, null);
+            _burstEvent = Native.CreateEvent(0, false, false, null);
+            if (stopEvent == 0 || _workerStopEvent == 0 || _burstEvent == 0)
                 return 1;
 
             foregroundHook = HookEvent(EventSystemForeground);
@@ -69,6 +76,9 @@ internal static unsafe class Program
 
             if (foregroundHook == 0 || showHook == 0 || uncloakHook == 0)
                 return 1;
+
+            _worker = new Thread(BurstWorker) { IsBackground = true };
+            _worker.Start();
 
             SetAllBorders(DwmColorNone);
             readyEvent = Native.CreateEvent(0, true, true, Protocol.ReadyEventName);
@@ -80,6 +90,9 @@ internal static unsafe class Program
         }
         finally
         {
+            Native.SetEvent(_workerStopEvent);
+            _worker?.Join();
+
             SetAllBorders(DwmColorDefault);
 
             if (uncloakHook != 0)
@@ -96,6 +109,12 @@ internal static unsafe class Program
 
             if (readyEvent != 0)
                 Native.CloseHandle(readyEvent);
+
+            if (_burstEvent != 0)
+                Native.CloseHandle(_burstEvent);
+
+            if (_workerStopEvent != 0)
+                Native.CloseHandle(_workerStopEvent);
 
             Native.ReleaseMutex(mutex);
             Native.CloseHandle(mutex);
@@ -168,27 +187,62 @@ internal static unsafe class Program
         }
     }
 
+    private static void BurstWorker()
+    {
+        nint timer = Native.CreateWaitableTimerEx(0, 0, CreateWaitableTimerHighResolution, TimerAllAccess);
+        if (timer == 0)
+            timer = Native.CreateWaitableTimerEx(0, 0, 0, TimerAllAccess);
+
+        nint* handles = stackalloc nint[2];
+        handles[0] = _workerStopEvent;
+        handles[1] = _burstEvent;
+
+        while (true)
+        {
+            uint wait = Native.WaitForMultipleObjects(2, handles, false, Infinite);
+            if (wait != WaitObject0 + 1)
+                break;
+
+            RunBurst(timer);
+        }
+
+        if (timer != 0)
+            Native.CloseHandle(timer);
+    }
+
+    private static void RunBurst(nint timer)
+    {
+        nint* handles = stackalloc nint[2];
+        handles[0] = _workerStopEvent;
+        handles[1] = timer;
+
+        Native.TimeBeginPeriod(TimerResolutionMilliseconds);
+
+        try
+        {
+            for (int i = 0; i < BurstPasses; i++)
+            {
+                SetAllBorders(DwmColorNone);
+
+                if (timer == 0)
+                    continue;
+
+                long due = BurstPassDelay;
+                Native.SetWaitableTimer(timer, &due, 0, 0, 0, false);
+
+                if (Native.WaitForMultipleObjects(2, handles, false, Infinite) == WaitObject0)
+                    break;
+            }
+        }
+        finally
+        {
+            Native.TimeEndPeriod(TimerResolutionMilliseconds);
+        }
+    }
+
     private static void SetAllBorders(uint color)
     {
         Native.EnumWindows(color == DwmColorNone ? &RemoveBorder : &RestoreBorder, 0);
-    }
-
-    private static void ScheduleSweeps()
-    {
-        _sweepTicksRemaining = SweepTicks;
-        _sweepTimer = Native.SetTimer(0, _sweepTimer, SweepIntervalMilliseconds, &OnSweepTimer);
-    }
-
-    [UnmanagedCallersOnly]
-    private static void OnSweepTimer(nint window, uint message, nuint timerId, uint time)
-    {
-        SetAllBorders(DwmColorNone);
-
-        if (--_sweepTicksRemaining > 0)
-            return;
-
-        Native.KillTimer(0, timerId);
-        _sweepTimer = 0;
     }
 
     [UnmanagedCallersOnly]
@@ -222,7 +276,7 @@ internal static unsafe class Program
         if (eventType == EventSystemForeground)
         {
             SetAllBorders(DwmColorNone);
-            ScheduleSweeps();
+            Native.SetEvent(_burstEvent);
             return;
         }
 

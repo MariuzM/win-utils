@@ -105,6 +105,9 @@ internal static unsafe partial class Win32
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool SetForegroundWindow(IntPtr hWnd);
 
+    [LibraryImport(User32, EntryPoint = "GetForegroundWindow")]
+    public static partial IntPtr GetForegroundWindow();
+
     [LibraryImport(User32, EntryPoint = "IsWindowVisible")]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool IsWindowVisible(IntPtr hWnd);
