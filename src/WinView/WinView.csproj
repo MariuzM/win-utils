@@ -14,7 +14,7 @@
 
     <!--
       No WPF, no WinForms, no WinRT. Decoding goes through the GDI+ flat C API, which is already
-      proven in WinShell's Wallpaper.cs - flat exports mean no COM vtable dispatch to hand-write,
+      accessed through flat exports with no COM vtable dispatch to hand-write,
       and gdiplus.dll is present on every Windows install. The cost of that choice is format
       coverage: PNG/JPEG/GIF/BMP/TIFF/ICO only, no HEIC or WebP. Those need WIC.
 

@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace WinSnip.Native;
 
-// [LibraryImport] throughout, matching WinShell: marshalling stubs are generated at compile time
+// [LibraryImport] throughout: marshalling stubs are generated at compile time
 // rather than emitted by the runtime. Callbacks are function pointers, never delegates, so nothing
 // has to be kept alive against the GC across a native call.
 internal static unsafe partial class Win32

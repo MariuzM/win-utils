@@ -2,8 +2,8 @@ using System.Runtime.InteropServices;
 
 namespace WinSnip.Native;
 
-// Same rule as WinShell: every struct here is blittable on purpose - no ByValTStr, no bool fields,
-// no string fields. LibraryImport will not source-generate marshalling for non-blittable types
+// Every struct here is blittable on purpose - no ByValTStr, no bool fields or string fields.
+// LibraryImport will not source-generate marshalling for non-blittable types
 // without extra ceremony. Where the real Win32 struct holds a string (WNDCLASSEXW) we keep an
 // IntPtr and marshal by hand at the call site; where it holds a fixed character buffer
 // (NOTIFYICONDATAW) we use a fixed char[] and copy into it.

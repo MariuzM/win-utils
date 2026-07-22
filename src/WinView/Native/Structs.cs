@@ -2,8 +2,8 @@ using System.Runtime.InteropServices;
 
 namespace WinView.Native;
 
-// Blittable only, same rule as WinShell and WinSnip: LibraryImport will not source-generate
-// marshalling for non-blittable types without extra ceremony.
+// Blittable only: LibraryImport will not source-generate marshalling for non-blittable types
+// without extra ceremony.
 
 [StructLayout(LayoutKind.Sequential)]
 internal struct POINT

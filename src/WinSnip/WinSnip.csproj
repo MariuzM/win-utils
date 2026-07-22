@@ -11,7 +11,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
 
     <!--
-      Unlike WinShell (net9.0-windows), this project needs a Windows-VERSIONED target framework.
+      This project needs a Windows-VERSIONED target framework.
       Plain net9.0-windows resolves to Windows,Version=7.0, which ships no Windows SDK projections
       at all - every Windows.Graphics.Capture type fails to resolve with CS0246. 20348 is the floor
       that makes GraphicsCaptureSession.IsBorderRequired compile; SupportedOSPlatformVersion is held
@@ -31,7 +31,7 @@
 
     <!--
       Auto = let CsWinRT detect which types cross the WinRT ABI rather than requiring every one of
-      them to be hand-annotated. Note this project is NOT AOT-clean the way WinShell is: consuming
+      them to be hand-annotated. This project is NOT AOT-clean: consuming
       WinRT runtime classes means CsWinRT projections, and neither CsWinRT's AOT support nor
       Windows.Graphics.Capture specifically has been validated under NativeAOT. Framework-dependent
       only until that is actually tested - do not add PublishAot here on the assumption it works.

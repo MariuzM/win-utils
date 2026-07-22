@@ -8,8 +8,8 @@ internal static unsafe class Program
 
     private static int Main(string[] args)
     {
-        // Headless decode check, in the same spirit as WinShell's diagnostic flags: it exercises
-        // GDI+ loading and the EXIF orientation path without needing a desktop to draw on.
+        // Headless decode check exercises GDI+ loading and the EXIF orientation path without
+        // needing a desktop to draw on.
         if (args.Length > 1 && args[0] == "--probe")
             return Probe(args[1]);
 

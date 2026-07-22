@@ -140,8 +140,7 @@ internal static class App
         NOTIFYICONDATAW data = NewIconData(NIF_MESSAGE | NIF_ICON | NIF_TIP);
         data.uCallbackMessage = WM_TRAY_CALLBACK;
 
-        // IDI_APPLICATION: the project embeds no icon resource, matching WinShell's habit of
-        // borrowing system icons rather than shipping assets.
+        // IDI_APPLICATION: the project embeds no icon resource and borrows a system icon.
         data.hIcon = Win32.LoadIcon(IntPtr.Zero, new IntPtr(32512));
         SetTip(ref data, "WinSnip - Ctrl+Shift+1/2/3");
 

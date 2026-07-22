@@ -9,9 +9,8 @@ internal static class Program
 
     private static int Main(string[] args)
     {
-        // Headless subcommands, in the same style as WinShell's diagnostic flags. These exist so
-        // the capture path can be exercised without the tray, the hotkeys or the overlay in the
-        // way - which is the only way to tell a capture bug from a UI bug.
+        // Headless subcommands exercise the capture path without the tray, hotkeys or overlay so
+        // capture bugs can be isolated from UI bugs.
         if (args.Length > 0)
             return RunCommand(args);
 
